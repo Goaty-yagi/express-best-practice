@@ -1,7 +1,8 @@
 import { config } from "dotenv";
 import errorHandler from "./middlewares/errorHandler";
+import requestValidater from "./middlewares/validation";
+import { schema } from "./middlewares/validation";
 import express, { Request, Response, NextFunction } from "express";
-
 config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,6 +19,10 @@ app.get("/error", (req: Request, res: Response, next:NextFunction) => {
   // trigger errorhandler
   const error = new Error("Something went wrong");
   next(error)
+});
+
+app.post("/validation", requestValidater(schema), (req: Request, res: Response) => {
+  // res.json("User data is valid!");
 });
 
 // Error handler should locate at the last
