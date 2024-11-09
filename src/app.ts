@@ -1,16 +1,24 @@
-import { config } from "dotenv";
+import 'dotenv/config';
 import errorHandler from "./middlewares/errorHandler";
 import requestValidater from "./middlewares/validation";
 import { schema } from "./middlewares/validation";
+import helmet from "helmet";
+import cors from "cors";
+import config from "./config";
+import limiter from './middlewares/rateLimiting';
 import express, { Request, Response, NextFunction } from "express";
-config();
 const app = express();
 const port = process.env.PORT || 3000;
 
 
-// Use body-parser middleware
+// parse reuest data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// security
+app.use(helmet(config.security.helmet))
+app.use(cors(config.security.cors))
+app.use(limiter)
 
 app.get("/", (req: Request, res: Response, next:NextFunction) => {
   res.send("Hello, World!");
@@ -21,8 +29,9 @@ app.get("/error", (req: Request, res: Response, next:NextFunction) => {
   next(error)
 });
 
+// Test rateLimiting
 app.post("/validation", requestValidater(schema), (req: Request, res: Response) => {
-  // res.json("User data is valid!");
+  res.json("User data is valid!");
 });
 
 // Error handler should locate at the last

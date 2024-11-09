@@ -2,13 +2,14 @@ import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
 
 const requestValidater = (schema: Joi.ObjectSchema) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     const { error, value } = schema.validate(req.body);
 
     if (error) {
       res.status(400).json({
         error: error.details[0].message,
       });
+      return;
     }
 
     // Overwrite req.body with the validated and sanitized value

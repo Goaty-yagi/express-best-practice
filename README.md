@@ -1,5 +1,35 @@
 # Express Best Practice
 
+##  Directory Structure
+```bash
+
+/project-root
+│
+├── /src                      # Source files for the application 
+│   ├── /config               # Configuration files
+│   ├── /controllers          # Controllers for handling requests
+│   ├── /middlewares          # Custom middleware (e.g., validation, JWT authentication)
+│   ├── /models               # Database models and schemas
+│   ├── /routes               # Express route definitions
+│   ├── /services             # Business logic or service layer
+│   ├── /utils                # Utility functions or helpers
+│   ├── /config               # Configuration files
+│   ├── /types                # TypeScript types and interfaces
+│   ├── /app.ts               # Main application setup
+│   └── /server.ts            # Entry point (start the server)
+│
+├── /node_modules
+├── /public
+├── /test
+│
+├── .env
+├── .gitignore
+├── package.json
+├── tsconfig.json
+└── README.md
+
+```
+
 ## Error Handling
 
 ### Purpose
@@ -59,8 +89,6 @@ The validation middleware is defined in the `middlewares/validation.ts/requestVa
 ```
 ## Environment variables
 
-## Environment Variables
-
 ### Purpose
 Environment variables are used to manage configuration settings and sensitive information such as API keys, database credentials, and other settings that your application needs to function correctly. This approach allows you to keep these details secure and separate from your codebase.
 
@@ -89,6 +117,10 @@ In your main application file (e.g., app.js or index.js), use the dotenv package
 ```javascript
 import { config } from "dotenv";
 config();
+
+or 
+
+import 'dotenv/config';
 ```
 
 #### Step 4: Access Environment Variables
@@ -108,3 +140,42 @@ To ensure that your environment variables are not exposed to version control, ad
 
 .env
 ```
+
+## Security
+
+To enhance the security of your Express application, it is important to configure proper middleware. Two commonly used middleware packages for this purpose are `cors` and `helmet`.
+
+### CORS (Cross-Origin Resource Sharing)
+
+CORS is a mechanism that allows restricted resources on a web page to be requested from another domain outside the domain from which the resource originated. This is useful for enabling your API to be accessed by different front-end applications hosted on different domains.
+
+You can implement cors using the `cors` package.
+
+#### Info
+https://www.npmjs.com/package/cors
+
+### Helmet
+
+Helmet helps secure your Express application by setting various HTTP headers. It can help protect your app from some well-known web vulnerabilities by configuring HTTP headers appropriately.
+
+You can implement Helmet using the `helmet` package.
+
+#### Info
+https://helmetjs.github.io/
+
+### Rate Limiting
+
+Rate limiting restricts the number of requests a user can make to your API in a certain period of time. This helps mitigate abuse from brute-force attacks, DoS (Denial of Service) attacks, and ensures fair usage of resources.
+
+You can implement rate limiting using the `express-rate-limit` package.
+
+#### Info
+https://www.npmjs.com/package/express-rate-limit
+
+## Configuration
+
+To manage all your security and application settings in one place, it's a good practice to use a configuration file. This allows you to update your settings centrally and apply them easily in your application.
+
+### Location
+
+The configration file is defined in the `src/config/index.ts` file. 
