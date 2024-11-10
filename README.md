@@ -8,19 +8,18 @@
 ├── /src                      # Source files for the application 
 │   ├── /config               # Configuration files
 │   ├── /controllers          # Controllers for handling requests
+│   ├── /loaders              # Centralized logic to load services
 │   ├── /middlewares          # Custom middleware (e.g., validation, JWT authentication)
 │   ├── /models               # Database models and schemas
 │   ├── /routes               # Express route definitions
 │   ├── /services             # Business logic or service layer
 │   ├── /utils                # Utility functions or helpers
-│   ├── /config               # Configuration files
 │   ├── /types                # TypeScript types and interfaces
 │   ├── /app.ts               # Main application setup
-│   └── /server.ts            # Entry point (start the server)
 │
 ├── /node_modules
 ├── /public
-├── /test
+├── /tests
 │
 ├── .env
 ├── .gitignore
@@ -30,6 +29,13 @@
 
 ```
 
+## 404 Error Handling
+This middleware is used to catch any requests that do not match an existing route in the Express application. When a request is made to a route that isn't defined, this middleware creates an error with the message "Not Found", sets the HTTP status code to 404, and passes the error to the next middleware using next(err).
+
+### Location
+The middleware is defined in the `loaders/index.ts` file. 
+
+
 ## Error Handling
 
 ### Purpose
@@ -38,7 +44,7 @@ Error handling in an Express application is essential to manage and respond to e
 
 ### Location
 
-The validation middleware is defined in the `middlewares/errorHandler.ts/errorHandler` file. The Joi schema used for validation is also defined and exported from the same file.
+This middleware is defined in the `middlewares/errorHandler.ts/errorHandler` file. The Joi schema used for validation is also defined and exported from the same file.
 
 ### Where to Locate
 
@@ -63,6 +69,7 @@ An error handling middleware in Express captures any error passed to the `next` 
 }
 ```
 
+### 
 ## Validation
 
 ### Purpose
@@ -143,7 +150,10 @@ To ensure that your environment variables are not exposed to version control, ad
 
 ## Security
 
-To enhance the security of your Express application, it is important to configure proper middleware. Two commonly used middleware packages for this purpose are `cors` and `helmet`.
+To enhance the security of your Express application, it is important to configure proper middleware. Two commonly used middleware packages for this purpose are `cors`, `helmet` and `express-rate-limit`.
+
+### Reference
+[express documentation](https://expressjs.com/en/advanced/best-practice-security.html)
 
 ### CORS (Cross-Origin Resource Sharing)
 
@@ -172,6 +182,11 @@ You can implement rate limiting using the `express-rate-limit` package.
 #### Info
 https://www.npmjs.com/package/express-rate-limit
 
+
+### Vulnerability
+`npm audit` is a built-in command in npm that helps developers identify and address vulnerabilities in their project dependencies. This command scans the node_modules directory for known security issues in the installed packages and reports any vulnerabilities found. It leverages the public npm registry's vulnerability database, which is regularly updated with the latest security advisories.
+
+
 ## Configuration
 
 To manage all your security and application settings in one place, it's a good practice to use a configuration file. This allows you to update your settings centrally and apply them easily in your application.
@@ -179,3 +194,4 @@ To manage all your security and application settings in one place, it's a good p
 ### Location
 
 The configration file is defined in the `src/config/index.ts` file. 
+

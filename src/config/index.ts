@@ -1,9 +1,21 @@
+import dotenv from 'dotenv';
+
+const envFound = dotenv.config();
+if (envFound.error) {
+  // This error should crash whole process
+  throw new Error("Couldn't find .env file");
+}
+
+
 export default {
   env: process.env.NODE_ENV || "development",
 
   port: process.env.PORT || 3000,
 
   database: {},
+  api: {
+    prefix:'/'
+  },
 
   rateLimit: {
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -48,5 +60,6 @@ export default {
       expiresIn: process.env.JWT_EXPIRES_IN || "1h", // Token expiry time
       algorithm: process.env.JWT_ALGORITHM || "HS256", // Algorithm used to sign the token
     },
+    port: 3000
   },
 };
