@@ -187,6 +187,22 @@ https://www.npmjs.com/package/express-rate-limit
 `npm audit` is a built-in command in npm that helps developers identify and address vulnerabilities in their project dependencies. This command scans the node_modules directory for known security issues in the installed packages and reports any vulnerabilities found. It leverages the public npm registry's vulnerability database, which is regularly updated with the latest security advisories.
 
 
+## Logger
+This application uses Winston for logging, providing flexible logging to both the console and a log file. The logger is configured to work in various environments (e.g., development, production) with different log formats and transports.
+
+### Location
+
+The loggeris defined in the `loaders/logger.ts` file. 
+
+### Example 
+
+```javascript
+
+import Logger from '../loaders/logger';
+
+Logger.info(`Server listening on port: ${config.port}`);
+```
+
 ## Configuration
 
 To manage all your security and application settings in one place, it's a good practice to use a configuration file. This allows you to update your settings centrally and apply them easily in your application.
