@@ -31,8 +31,8 @@ export default {
     cookie: { secure: false },
   },
 
-  logging: {
-    level: process.env.LOG_LEVEL || "info",
+  logs: {
+    level: process.env.LOG_LEVEL || "info", // 'info' | 'debug' | 'warn' | 'error';
     dir: process.env.LOG_DIR || "logs",
   },
 
