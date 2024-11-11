@@ -1,4 +1,5 @@
-import { NextFunction, Request, Response, Router } from "express";
+import Logger from "../loaders/logger";
+import { NextFunction, Request, Response} from "express";
 
 // the error handler will only be invoked if it receives an error object through next(err).
 const errorHandler = (
@@ -7,7 +8,6 @@ const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log("EH",res.statusCode )
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
   res.status(statusCode);
 
@@ -16,8 +16,8 @@ const errorHandler = (
     message: err.message,
     stack: process.env.NODE_ENV === "production" ? "" : err.stack,
   };
-  // logging here
-  console.log("Error from handler:", responseBody);
+
+  Logger.error(err.message)
   res.json(responseBody);
 };
 

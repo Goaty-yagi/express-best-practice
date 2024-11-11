@@ -1,0 +1,131 @@
+openapi: 3.0.1
+info:
+  title: User Authentication API
+  description: API for user registration and login with provider-specific options.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/v1
+
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      description: Registers a new user to the system with a specified provider.
+      parameters:
+        - name: provider
+          in: query
+          required: true
+          description: The cloud provider to use for registration.
+          schema:
+            type: string
+            enum: [aws, gcp, azure]
+      responses:
+        '200':
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: string
+              examples:
+                aws:
+                  value:
+                    message: "User successfully registered with AWS."
+                    userId: "12345"
+                gcp:
+                  value:
+                    message: "User successfully registered with GCP."
+                    userId: "67890"
+                azure:
+                  value:
+                    message: "User successfully registered with Azure."
+                    userId: "13579"
+        '400':
+          description: Invalid provider value
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /login:
+    post:
+      summary: Log in a user
+      description: Logs in an existing user with a specified provider.
+      parameters:
+        - name: provider
+          in: query
+          required: true
+          description: The cloud provider to use for login.
+          schema:
+            type: string
+            enum: [aws, gcp, azure]
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  token:
+                    type: string
+              examples:
+                aws:
+                  value:
+                    message: "User successfully logged in with AWS."
+                    token: "aws-token-12345"
+                gcp:
+                  value:
+                    message: "User successfully logged in with GCP."
+                    token: "gcp-token-67890"
+                azure:
+                  value:
+                    message: "User successfully logged in with Azure."
+                    token: "azure-token-13579"
+        '400':
+          description: Invalid provider value
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '401':
+          description: Unauthorized, invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+

@@ -17,6 +17,8 @@
 │   ├── /types                # TypeScript types and interfaces
 │   ├── /app.ts               # Main application setup
 │
+├── /docs                     # API documentation, including Swagger YAML/JSON
+│   └── api-docs.yaml         # Swagger/OpenAPI spec file
 ├── /node_modules
 ├── /public
 ├── /tests
@@ -211,3 +213,18 @@ To manage all your security and application settings in one place, it's a good p
 
 The configration file is defined in the `src/config/index.ts` file. 
 
+
+
+## Swagger API Documentation
+
+### Steps to Use Swagger Editor:
+Swagger/OpenAI is a framework for designing, building, and documenting RESTful APIs. It provides a standardized format (usually in YAML or JSON) to describe API endpoints, request parameters, responses, and other details, making it easier for developers to create, test, and maintain APIs.
+
+#### 1. Open Swagger Editor
+- Go to (Swagger Editor)[https://editor.swagger.io/].
+
+#### 2. Load the API Documentation
+- Copy the API documentation `docs/api-docs.yaml` and paste it into the Swagger Editor.
+
+### 3. Explore and Test the API:
+- Once the documentation is loaded in Swagger Editor, you will see the /register and /login endpoints.
