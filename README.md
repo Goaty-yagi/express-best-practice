@@ -228,3 +228,6 @@ Swagger/OpenAI is a framework for designing, building, and documenting RESTful A
 
 ### 3. Explore and Test the API:
 - Once the documentation is loaded in Swagger Editor, you will see the /register and /login endpoints.
+
+
+or you can access `http://localhost:3000/api-docs`

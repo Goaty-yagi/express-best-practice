@@ -5,6 +5,7 @@ import limiter from "../middlewares/rateLimiting";
 import errorHandler from "../middlewares/errorHandler";
 import routes from "../routes";
 import config from "../config";
+import swagger from "./swagger";
 
 export default ({ app }: { app: express.Application }) => {
   // parse request data
@@ -15,6 +16,12 @@ export default ({ app }: { app: express.Application }) => {
   app.use(helmet(config.security.helmet));
   app.use(cors(config.security.cors));
   app.use(limiter);
+
+  // swagger for development
+  if (config.env !== 'production') {
+    app.use('/api-docs',...swagger())
+  }
+  
 
   // routes
   app.use(config.api.prefix, routes());

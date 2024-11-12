@@ -42,10 +42,13 @@ export default {
         origin: string | undefined,
         callback: (err: Error | null, allow?: boolean) => void,
       ) => {
+        // Check if the whitelist is set in the environment
         const whitelist = process.env.CORS_WHITELIST
           ? process.env.CORS_WHITELIST.split(",")
-          : ["*"];
-        if (!origin || whitelist.includes(origin)) {
+          : [];
+          
+        // If whitelist is empty, allow all origins
+        if (!origin || whitelist.length === 0 || whitelist.includes(origin) || process.env.CORS_WHITELIST === "*") {
           callback(null, true);
         } else {
           callback(new Error("Not allowed by CORS"));
