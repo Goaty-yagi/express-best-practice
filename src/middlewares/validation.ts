@@ -1,14 +1,15 @@
+import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { Request, Response, NextFunction } from "express";
+
+import { ClientError } from "../errors";
 
 const requestValidater = (schema: Joi.ObjectSchema) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const { error, value } = schema.validate(req.body);
 
     if (error) {
-      res.status(400).json({
-        error: error.details[0].message,
-      });
+      const err = new ClientError(error.details[0].message);
+      next(err);
       return;
     }
 
@@ -21,6 +22,7 @@ const requestValidater = (schema: Joi.ObjectSchema) => {
 export const schema = Joi.object({
   username: Joi.string().required(),
   email: Joi.string().email().required(),
+  password: Joi.string().min(8).required(),
 });
 
-export default requestValidater
+export default requestValidater;

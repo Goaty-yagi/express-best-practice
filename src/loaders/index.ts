@@ -1,10 +1,11 @@
-import express from "express";
-import helmet from "helmet";
 import cors from "cors";
-import limiter from "../middlewares/rateLimiting";
-import errorHandler from "../middlewares/errorHandler";
-import routes from "../routes";
+import express, { ErrorRequestHandler } from "express";
+import helmet from "helmet";
+import { NotFoundError } from "../errors";
 import config from "../config";
+import errorHandler from "../middlewares/errorHandler";
+import limiter from "../middlewares/rateLimiting";
+import routes from "../routes";
 import swagger from "./swagger";
 
 export default ({ app }: { app: express.Application }) => {
@@ -18,21 +19,19 @@ export default ({ app }: { app: express.Application }) => {
   app.use(limiter);
 
   // swagger for development
-  if (config.env !== 'production') {
-    app.use('/api-docs',...swagger())
+  if (config.env !== "production") {
+    app.use("/api-docs", ...swagger());
   }
-  
 
   // routes
   app.use(config.api.prefix, routes());
 
   // don’t match any of the defined routes.
   app.use((req, res, next) => {
-    const err = new Error('Not Found')
-    res.statusCode = 404
+    const err = new NotFoundError("Not Found");
     next(err);
   });
 
   // Error handler should be at the last
-  app.use(errorHandler);
+  app.use(errorHandler as ErrorRequestHandler);
 };

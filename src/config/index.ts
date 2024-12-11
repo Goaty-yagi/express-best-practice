@@ -1,11 +1,10 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 const envFound = dotenv.config();
 if (envFound.error) {
   // This error should crash whole process
   throw new Error("Couldn't find .env file");
 }
-
 
 export default {
   env: process.env.NODE_ENV || "development",
@@ -14,7 +13,7 @@ export default {
 
   database: {},
   api: {
-    prefix:'/'
+    prefix: "/",
   },
 
   rateLimit: {
@@ -46,9 +45,14 @@ export default {
         const whitelist = process.env.CORS_WHITELIST
           ? process.env.CORS_WHITELIST.split(",")
           : [];
-          
+
         // If whitelist is empty, allow all origins
-        if (!origin || whitelist.length === 0 || whitelist.includes(origin) || process.env.CORS_WHITELIST === "*") {
+        if (
+          !origin ||
+          whitelist.length === 0 ||
+          whitelist.includes(origin) ||
+          process.env.CORS_WHITELIST === "*"
+        ) {
           callback(null, true);
         } else {
           callback(new Error("Not allowed by CORS"));
@@ -63,6 +67,6 @@ export default {
       expiresIn: process.env.JWT_EXPIRES_IN || "1h", // Token expiry time
       algorithm: process.env.JWT_ALGORITHM || "HS256", // Algorithm used to sign the token
     },
-    port: 3000
+    port: 3000,
   },
 };

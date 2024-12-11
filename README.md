@@ -1,13 +1,15 @@
 # Express Best Practice
 
-##  Directory Structure
+## Directory Structure
+
 ```bash
 
 /project-root
 │
-├── /src                      # Source files for the application 
+├── /src                      # Source files for the application
 │   ├── /config               # Configuration files
 │   ├── /controllers          # Controllers for handling requests
+│   ├── /errors               # Error classes
 │   ├── /loaders              # Centralized logic to load services
 │   ├── /middlewares          # Custom middleware (e.g., validation, JWT authentication)
 │   ├── /models               # Database models and schemas
@@ -32,11 +34,12 @@
 ```
 
 ## 404 Error Handling
+
 This middleware is used to catch any requests that do not match an existing route in the Express application. When a request is made to a route that isn't defined, this middleware creates an error with the message "Not Found", sets the HTTP status code to 404, and passes the error to the next middleware using next(err).
 
 ### Location
-The middleware is defined in the `loaders/index.ts` file. 
 
+The middleware is defined in the `loaders/index.ts` file.
 
 ## Error Handling
 
@@ -46,7 +49,8 @@ Error handling in an Express application is essential to manage and respond to e
 
 ### Location
 
-This middleware is defined in the `middlewares/errorHandler.ts/errorHandler` file. The Joi schema used for validation is also defined and exported from the same file.
+- This middleware is defined in the `middlewares/errorHandler.ts/errorHandler` file. The Joi schema used for validation is also defined and exported from the same file.
+- All errors are also defined as classes in the `src/errors` directory.
 
 ### Where to Locate
 
@@ -66,12 +70,16 @@ An error handling middleware in Express captures any error passed to the `next` 
 
 ```javascript
  {
+  "statusCode": 500,
+  "error": ServerError, // error class
   "message": "Something went wrong!",
+  "details":[]
   "stack": "Error: Something went wrong!\n    at /path/to/project/app.js:XX:XX\n    at Layer.handle [as handle_request] (/path/to/project/node_modules/express/lib/router/layer.js:95:5)\n    at next (/path/to/project/node_modules/express/lib/router/route.js:137:13)\n    at Route.dispatch (/path/to/project/node_modules/express/lib/router/route.js:112:3)\n    at Layer.handle [as handle_request] (/path/to/project/node_modules/express/lib/router/layer.js:95:5)\n    at /path/to/project/node_modules/express/lib/router/index.js:281:22\n    at Function.process_params (/path/to/project/node_modules/express/lib/router/index.js:335:12)\n    at next (/path/to/project/node_modules/express/lib/router/index.js:275:10)\n    at /path/to/project/app.js:XX:XX\n    at Layer.handle [as handle_request] (/path/to/project/node_modules/express/lib/router/layer.js:95:5)"
 }
 ```
 
-### 
+###
+
 ## Validation
 
 ### Purpose
@@ -96,14 +104,17 @@ The validation middleware is defined in the `middlewares/validation.ts/requestVa
     "error": "\"email\" is required"
 }
 ```
+
 ## Environment variables
 
 ### Purpose
+
 Environment variables are used to manage configuration settings and sensitive information such as API keys, database credentials, and other settings that your application needs to function correctly. This approach allows you to keep these details secure and separate from your codebase.
 
 ### Setup
 
 #### Step 1: Install `dotenv`
+
 First, you need to install the `dotenv` package if you haven't already:
 
 ```bash
@@ -125,14 +136,15 @@ In your main application file (e.g., app.js or index.js), use the dotenv package
 
 ```javascript
 import { config } from "dotenv";
+import "dotenv/config";
+
 config();
 
-or 
-
-import 'dotenv/config';
+or;
 ```
 
 #### Step 4: Access Environment Variables
+
 You can now access the environment variables using process.env.
 
 ```javascript
@@ -144,6 +156,7 @@ const jwtSecret = process.env.JWT_SECRET;
 #### Step 5: Add .env to .gitignore
 
 To ensure that your environment variables are not exposed to version control, add the .env file to your .gitignore file:
+
 ```
 # .gitignore
 
@@ -155,6 +168,7 @@ To ensure that your environment variables are not exposed to version control, ad
 To enhance the security of your Express application, it is important to configure proper middleware. Two commonly used middleware packages for this purpose are `cors`, `helmet` and `express-rate-limit`.
 
 ### Reference
+
 [express documentation](https://expressjs.com/en/advanced/best-practice-security.html)
 
 ### CORS (Cross-Origin Resource Sharing)
@@ -164,6 +178,7 @@ CORS is a mechanism that allows restricted resources on a web page to be request
 You can implement cors using the `cors` package.
 
 #### Info
+
 https://www.npmjs.com/package/cors
 
 ### Helmet
@@ -173,6 +188,7 @@ Helmet helps secure your Express application by setting various HTTP headers. It
 You can implement Helmet using the `helmet` package.
 
 #### Info
+
 https://helmetjs.github.io/
 
 ### Rate Limiting
@@ -182,25 +198,25 @@ Rate limiting restricts the number of requests a user can make to your API in a 
 You can implement rate limiting using the `express-rate-limit` package.
 
 #### Info
+
 https://www.npmjs.com/package/express-rate-limit
 
-
 ### Vulnerability
+
 `npm audit` is a built-in command in npm that helps developers identify and address vulnerabilities in their project dependencies. This command scans the node_modules directory for known security issues in the installed packages and reports any vulnerabilities found. It leverages the public npm registry's vulnerability database, which is regularly updated with the latest security advisories.
 
-
 ## Logger
+
 This application uses Winston for logging, providing flexible logging to both the console and a log file. The logger is configured to work in various environments (e.g., development, production) with different log formats and transports.
 
 ### Location
 
-The loggeris defined in the `loaders/logger.ts` file. 
+The loggeris defined in the `loaders/logger.ts` file.
 
-### Example 
+### Example
 
 ```javascript
-
-import Logger from '../loaders/logger';
+import Logger from "../loaders/logger";
 
 Logger.info(`Server listening on port: ${config.port}`);
 ```
@@ -211,23 +227,24 @@ To manage all your security and application settings in one place, it's a good p
 
 ### Location
 
-The configration file is defined in the `src/config/index.ts` file. 
-
-
+The configration file is defined in the `src/config/index.ts` file.
 
 ## Swagger API Documentation
 
 ### Steps to Use Swagger Editor:
+
 Swagger/OpenAI is a framework for designing, building, and documenting RESTful APIs. It provides a standardized format (usually in YAML or JSON) to describe API endpoints, request parameters, responses, and other details, making it easier for developers to create, test, and maintain APIs.
 
 #### 1. Open Swagger Editor
+
 - Go to (Swagger Editor)[https://editor.swagger.io/].
 
 #### 2. Load the API Documentation
+
 - Copy the API documentation `docs/api-docs.yaml` and paste it into the Swagger Editor.
 
 ### 3. Explore and Test the API:
-- Once the documentation is loaded in Swagger Editor, you will see the /register and /login endpoints.
 
+- Once the documentation is loaded in Swagger Editor, you will see the /register and /login endpoints.
 
 or you can access `http://localhost:3000/api-docs`

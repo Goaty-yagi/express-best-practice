@@ -1,24 +1,31 @@
+import { NextFunction, Request, Response } from "express";
+
+import { BaseApiError, ServerError } from "../errors";
 import Logger from "../loaders/logger";
-import { NextFunction, Request, Response} from "express";
 
 // the error handler will only be invoked if it receives an error object through next(err).
 const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+  if (!(err instanceof BaseApiError)) {
+    const errorResponse = new ServerError(
+      `${err.name} is not instance of BaseApiError`,
+    );
+
+    res.status(500);
+    Logger.error(err.message);
+    return res.json(errorResponse);
+  }
+
+  const statusCode = err.statusCode;
+
   res.status(statusCode);
-
-  const responseBody = {
-    statusCode,
-    message: err.message,
-    stack: process.env.NODE_ENV === "production" ? "" : err.stack,
-  };
-
-  Logger.error(err.message)
-  res.json(responseBody);
+  Logger.error(err.message);
+  res.json(err);
 };
 
 export default errorHandler;
